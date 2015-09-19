@@ -1,0 +1,19 @@
+input {
+    margin:10px 0px;
+}
+
+.register-form {
+    margin:20px;
+    width: 1000px;
+    height:800px;
+}
+
+.well {
+    margin: 30px;
+    width: 60%;
+}
+
+.btn-centered {
+    width:60%;
+    margin:auto;
+}

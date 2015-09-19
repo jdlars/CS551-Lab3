@@ -1,21 +1,20 @@
-<!DOCTYPE html>
-<html>
 
-<head>
-    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootswatch/3.1.1/readable/bootstrap.min.css">
-    <link rel="stylesheet" href="style.css">
+<!--container for the registration form-->
+<div class="register-form">
+    <!-- row for the header-->
+    <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-4 well well-sm">
+            <!-- assign an action to the form-->
+            <!-- TODO-->
+            <!-- div for first/last name-->
 
-    <script src="http://code.angularjs.org/1.2.13/angular.js"></script>
-    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.13/angular-route.js"></script>
-    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.13/angular-animate.js"></script>
-    <script src="home.js"></script>
-</head>
-
-<body>
-<p>welcome to home.html</p>
-    <a href="#/">Home</a>
-    <a href="#/register">Register</a>
-    <a href="#/mapweather">Login</a>
-</body>
-
-</html>
+            <!-- two single line input fields-->
+            <input class="form-control" name="username" id="login-username" ng-model="user.username" placeholder="Your Username" type="text" />
+            <input class="form-control" name="password" id="login-password" ng-model="user.password" placeholder="New Password" type="password" />
+            <button class="btn btn-lg btn-primary btn-block btn-centered" id="register-submit" type="submit"
+                    ng-click="login(user.username, user.password)"> Log in </button>
+            <a href="#register">Register new account</a>
+            </form>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,14 @@
+
+<div class="row">
+    <div class="input-group">
+        <input type="text" class ="form-control"  ng-model="startlocation" id="startlocation" style="margin-left:100px; width:300px; margin-right:10px;" placeholder="Start Location"/>
+        <input type="text" class ="form-control" ng-model="endlocation" id="endlocation" style="width:300px;" placeholder="Destination" />
+        <button class="btn btn-primary" id="directions-btn" ng-click="calculateRouteAndWeather()" style="margin-left:100px;">
+            Get Directions And Weather
+        </button>
+    </div>
+    <br/></br>
+</div>
+<p class="currentConditions" ng-bind-html-unsafe="currentweather.html"></p>
+<div class="currentIcon" ng-bind-html-unsafe="currentIcon.html"></div>
+<div id="map-canvas" style="height: 400px;"></div>

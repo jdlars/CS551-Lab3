@@ -1,62 +1,81 @@
-var myIntroApp = angular.module('myIntroApp', ['ngRoute', 'ngAnimate']);
+var myIntroApp = angular.module('myIntroApp', ['ngRoute']);
 
 myIntroApp.config(function ($routeProvider) {
     $routeProvider
-        .when('/', {
+        .when('/home', {
             templateUrl: 'home.html',
             controller: 'mainController'
         })
-        .when('/about', {
+        .when('/register', {
             templateUrl: 'register.html',
             controller: 'registerController'
         })
-        .when('/map-weather', {
+        .when('/mapweather', {
             templateUrl: 'mapweather.html',
             controller: 'mapWeatherController'
+        })
+        .otherwise({
+            redirectTo: '/home'
         });
 });
 
-$scope.go = function (path) {
-    $location.path(path);
-}
 
-myIntroApp.controller('mainController', function ($scope) {
+myIntroApp.controller('mainController', function ($scope, $location) {
     $scope.pageClass = 'home';
+    $scope.go = function(path) {
+        $location.path(path);
+    };
+    $scope.login = function (username, password) {
+        localStorage.setItem(username, password);
+        $scope.go('/mapweather');
+    };
 });
 
 
-myIntroApp.controller('registerController', function ($scope) {
+myIntroApp.controller('registerController', function ($scope, $location) {
     $scope.pageClass = 'register';
+    $scope.go = function(path) {
+        $location.path(path);
+    };
 });
 
-myIntroApp.controller('mapWeatherController', function ($scope) {
+myIntroApp.controller('mapWeatherController', function ($scope, $http, $location) {
     $scope.pageClass = 'mapweather';
-});
+    $scope.go = function(path) {
+        $location.path(path);
+    };
+    /*
+    Google Map usage to get driving directions from an origin to a destination
 
-angular.module('GoogleDirections', []).controller('googlemapoutput', function ($scope) {
-    var map = null;
-    var options = null;
-    var pos = null;
-    var directionsDisplay = null;
-    var directionsService = null;
-    directionsDisplay = new google.maps.DirectionsRenderer({
+     */
+    var map;
+    var mapOptions;
+    var directionsDisplay = new google.maps.DirectionsRenderer({
         draggable: true
     });
-    directionsService = new google.maps.DirectionsService();
+    var directionsService = new google.maps.DirectionsService();
 
     $scope.initialize = function () {
-        pos = new google.maps.LatLng(0, 0);
-        options = {
+        var pos = new google.maps.LatLng(0, 0);
+        var mapOptions = {
             zoom: 3,
             center: pos
         };
+
         map = new google.maps.Map(document.getElementById('map-canvas'),
-            options);
+            mapOptions);
     };
 
-    $scope.calculateRoute = function () {
-        var end = document.getElementById('endLocation').value;
-        var start = document.getElementById('startLocation').value;
+    $scope.calculateRouteAndWeather = function() {
+        var start = document.getElementById('startlocation').value;
+        var end = document.getElementById('endlocation').value;
+        $scope.calculateRoute(start, end);
+        $scope.getWeatherResults(start);
+        $scope.getWeatherResults(end);
+    };
+
+    $scope.calculateRoute = function (start, end) {
+
         var request = {
             origin: start,
             destination: end,
@@ -69,7 +88,31 @@ angular.module('GoogleDirections', []).controller('googlemapoutput', function ($
                 directionsDisplay.setDirections(response);
                 console.log(status);
             }
+
         });
     };
+
+
+
     google.maps.event.addDomListener(window, 'load', $scope.initialize);
+    $scope.getWeatherResults = function (cityAndState) {
+        var splitStringToArray = cityAndState.split(',');
+        var fullCity = splitStringToArray[0];
+        var state = splitStringToArray[1];
+        var cityWithUnderscores = fullCity.replace(/ /g,"_");
+        var restUrl = "http://api.wunderground.com/api/36b799dc821d5836/conditions/q/" + state + "/" + cityWithUnderscores + ".json";
+        console.log(restUrl);
+        $http.get(restUrl).success(function(data) {
+            console.log(data);
+            //location = data.current_observation.full;
+            temp = data.current_observation.temp_f;
+            icon = data.current_observation.icon_url;
+            weather = data.current_observation.weather;
+            console.log(temp);
+            $scope.currentweather = {html:"Currently " +temp +" &deg; F and " + weather + " in "};
+            $scope.currentIcon=  {html:"<img src='" + icon  +"'/>"};
+
+        });
+    };
+
 });

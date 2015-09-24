@@ -17,3 +17,22 @@ input {
     width:60%;
     margin:auto;
 }
+
+.beername {
+    position:relative;
+    z-index: 100;
+    width:80%;
+    margin:auto;
+}
+
+.beerdesc {
+    position:relative;
+    z-index:100;
+}
+
+.currentBeerIcon {
+    position:relative;
+
+    margin-top: -120px;
+    z-index: -1;
+}
